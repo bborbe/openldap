@@ -12,9 +12,6 @@ EXPOSE 389 636
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-#CMD ulimit -n 8192 && /usr/sbin/slapd -d 256 -u ldap -g ldap -F /etc/openldap
-#CMD ulimit -n 8192 && /usr/sbin/slapd -d 16383 -u ldap -g ldap -F /etc/openldap
-
 #CMD ["slapd", "-d", "256", "-u", "ldap", "-g", "ldap"]
 #CMD ["slapd", "-d", "16383", "-u", "ldap", "-g", "ldap"]
 CMD ["slapd", "-d", "32768", "-u", "ldap", "-g", "ldap"]
