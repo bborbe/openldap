@@ -1,5 +1,7 @@
 # Openldap Dockerfile
 
+Alpine based Slapd Ldap-Server
+
 ## Copyright and license
 
     Copyright (c) 2016, Benjamin Borbe <bborbe@rocketnews.de>
