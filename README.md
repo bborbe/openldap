@@ -2,6 +2,17 @@
 
 Alpine based Slapd Ldap-Server
 
+## Run
+
+```
+docker run \
+-p 389:389 -p 636:636 \
+-e LDAP_SECRET='bIgGMKt5nWX3fL9EaPZ86Aklrb587fy1' \
+-e LDAP_SUFFIX='dc=my-domain,dc=com' \
+-e LDAP_ROOTDN='cn=Manager,dc=my-domain,dc=com' \
+bborbe/openldap:latest
+```
+
 ## Copyright and license
 
     Copyright (c) 2016, Benjamin Borbe <bborbe@rocketnews.de>
