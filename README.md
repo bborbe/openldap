@@ -7,11 +7,35 @@ Alpine based Slapd Ldap-Server
 ```
 docker run \
 -p 389:389 -p 636:636 \
--e LDAP_SECRET='bIgGMKt5nWX3fL9EaPZ86Aklrb587fy1' \
+-e LDAP_SECRET='S3CR3T' \
 -e LDAP_SUFFIX='dc=my-domain,dc=com' \
 -e LDAP_ROOTDN='cn=Manager,dc=my-domain,dc=com' \
 bborbe/openldap:latest
 ```
+
+### Create Struct
+
+`vi base.ldif`
+
+```
+dn: dc=example,dc=com
+objectClass: dcObject
+objectClass: organization
+o: example.com
+dc: example
+
+dn: ou=users,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+```
+
+`ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f base.ldif`
 
 ## Copyright and license
 
