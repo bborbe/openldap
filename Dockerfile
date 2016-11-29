@@ -6,6 +6,10 @@ RUN apk add --update openldap openldap-clients openldap-back-hdb openldap-back-b
 ADD slapd.conf /etc/openldap/slapd.conf.template
 ADD DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
 
+ENV LDAP_SECRET 'S3CR3T'
+ENV LDAP_SUFFIX 'dc=example,dc=com'
+ENV LDAP_ROOTDN 'cn=admin,dc=example,dc=com'
+
 EXPOSE 389 636
 
 COPY entrypoint.sh /usr/local/bin/
