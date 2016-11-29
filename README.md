@@ -8,8 +8,8 @@ Alpine based Slapd Ldap-Server
 docker run \
 -p 389:389 -p 636:636 \
 -e LDAP_SECRET='S3CR3T' \
--e LDAP_SUFFIX='dc=my-domain,dc=com' \
--e LDAP_ROOTDN='cn=Manager,dc=my-domain,dc=com' \
+-e LDAP_SUFFIX='dc=example,dc=com' \
+-e LDAP_ROOTDN='cn=root,dc=example,dc=com' \
 bborbe/openldap:latest
 ```
 
@@ -35,7 +35,7 @@ objectClass: organizationalUnit
 objectClass: top
 ```
 
-ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f base.ldif
+ldapadd -x -W -D "cn=root,dc=example,dc=com" -f base.ldif
 
 ## Create user
 
@@ -53,11 +53,11 @@ givenName: Benjamin
 sn: Borbe
 ```
 
-ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f user.ldif
+ldapadd -x -W -D "cn=root,dc=example,dc=com" -f user.ldif
 
 ## Set Password for user
 
-ldappasswd -s S3CR3T -W -D "cn=admin,dc=example,dc=com" -x "uid=bb,ou=users,dc=example,dc=com"
+ldappasswd -s S3CR3T -W -D "cn=root,dc=example,dc=com" -x "uid=bborbe,ou=users,dc=example,dc=com"
 
 ## Copyright and license
 
