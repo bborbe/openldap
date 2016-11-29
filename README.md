@@ -13,29 +13,51 @@ docker run \
 bborbe/openldap:latest
 ```
 
-### Create Struct
+## Setup Ldap structur
 
-`vi base.ldif`
+cat > base.ldif
 
 ```
 dn: dc=example,dc=com
+dc: example
 objectClass: dcObject
 objectClass: organization
-o: example.com
-dc: example
+o: Example
 
 dn: ou=users,dc=example,dc=com
+ou: users
 objectClass: organizationalUnit
 objectClass: top
-ou: users
 
 dn: ou=groups,dc=example,dc=com
+ou: groups
 objectClass: organizationalUnit
 objectClass: top
-ou: groups
 ```
 
-`ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f base.ldif`
+ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f base.ldif
+
+## Create user
+
+cat > user.ldif
+
+```
+dn: uid=bborbe,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+uid: bborbe
+cn: Benjamin Borbe
+givenName: Benjamin
+sn: Borbe
+```
+
+ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f user.ldif
+
+## Set Password for user
+
+ldappasswd -s S3CR3T -W -D "cn=admin,dc=example,dc=com" -x "uid=bb,ou=users,dc=example,dc=com"
 
 ## Copyright and license
 
