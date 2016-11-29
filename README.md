@@ -51,6 +51,7 @@ uid: bborbe
 cn: Benjamin Borbe
 givenName: Benjamin
 sn: Borbe
+mail: bborbe@rocketnews.de
 ```
 
 ldapadd -x -W -D "cn=root,dc=example,dc=com" -f user.ldif
@@ -58,6 +59,35 @@ ldapadd -x -W -D "cn=root,dc=example,dc=com" -f user.ldif
 ## Set Password for user
 
 ldappasswd -s S3CR3T -W -D "cn=root,dc=example,dc=com" -x "uid=bborbe,ou=users,dc=example,dc=com"
+
+## Create group
+
+cat > group-employees.ldif
+
+```
+dn: ou=employees,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+ou: employees
+cn: Employees
+member: uid=bborbe,ou=users,dc=example,dc=com
+```
+
+ldapadd -x -W -D "cn=root,dc=example,dc=com" -f group-employees.ldif
+
+cat > group-admins.ldif
+
+```
+dn: ou=admins,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+ou: admins
+cn: Admins
+member: uid=bborbe,ou=users,dc=example,dc=com
+```
+
+ldapadd -x -W -D "cn=root,dc=example,dc=com" -f group-admins.ldif
+
 
 ## Copyright and license
 
