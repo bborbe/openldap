@@ -3,8 +3,8 @@ MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
 
 RUN apk add --update openldap openldap-clients openldap-back-hdb openldap-back-bdb ldapvi bash && rm -rf /var/cache/apk/*
 
-ADD slapd.conf /etc/openldap/slapd.conf.template
-ADD DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
+COPY slapd.conf /etc/openldap/slapd.conf.template
+COPY DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
 
 ENV LDAP_SECRET 'S3CR3T'
 ENV LDAP_SUFFIX 'dc=example,dc=com'
