@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
 
-RUN apk add --update openldap openldap-clients openldap-back-hdb openldap-back-bdb ldapvi bash && rm -rf /var/cache/apk/*
+RUN apk add --update ca-certificates openldap openldap-clients openldap-back-hdb openldap-back-bdb ldapvi bash && rm -rf /var/cache/apk/*
 
 COPY slapd.conf /etc/openldap/slapd.conf.template
 COPY DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
