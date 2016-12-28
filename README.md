@@ -1,4 +1,4 @@
-# Openldap Dockerfile
+# Openldap
 
 Alpine based Slapd Ldap-Server
 
