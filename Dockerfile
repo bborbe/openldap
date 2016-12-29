@@ -1,5 +1,6 @@
 FROM alpine:3.4
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
+ARG VERSION
 
 RUN apk add --update ca-certificates openldap openldap-clients openldap-back-hdb openldap-back-bdb ldapvi bash && rm -rf /var/cache/apk/*
 
