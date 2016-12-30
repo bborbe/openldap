@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
 ARG VERSION
 
