@@ -1,12 +1,13 @@
-VERSION ?= 1.1.0
+VERSION ?= latest
+REGISTRY ?= docker.io
 
 default: build
 
 clean:
-	docker rmi bborbe/openldap:$(VERSION)
+	docker rmi $(REGISTRY)/bborbe/openldap:$(VERSION)
 
 build:
-	docker build --build-arg VERSION=$(VERSION) --no-cache --rm=true -t bborbe/openldap:$(VERSION) .
+	docker build --build-arg VERSION=$(VERSION) --no-cache --rm=true -t $(REGISTRY)/bborbe/openldap:$(VERSION) .
 
 run:
 	docker run \
@@ -14,10 +15,10 @@ run:
   -e LDAP_SECRET='S3CR3T' \
   -e LDAP_SUFFIX='dc=example,dc=com' \
   -e LDAP_ROOTDN='cn=root,dc=example,dc=com' \
-  bborbe/openldap:$(VERSION)
+  $(REGISTRY)/bborbe/openldap:$(VERSION)
 
 shell:
-	docker run -i -t bborbe/openldap:$(VERSION) /bin/bash
+	docker run -i -t $(REGISTRY)/bborbe/openldap:$(VERSION) /bin/bash
 
 upload:
-	docker push bborbe/openldap:$(VERSION)
+	docker push $(REGISTRY)/bborbe/openldap:$(VERSION)
