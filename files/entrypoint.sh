@@ -20,6 +20,10 @@ if [ "$1" = 'slapd' ]; then
 		sed_script+="s~{{$var}}~${!var}~g;"
 	done
 
+	mkdir -p /run/openldap
+	chmod 777 /run/openldap
+	chown -R ldap:ldap /run/openldap
+
 	echo "create slapd.conf"
 	cat /etc/openldap/slapd.conf.template | sed -e "$sed_script" > /etc/openldap/slapd.conf
 

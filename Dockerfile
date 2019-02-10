@@ -1,11 +1,20 @@
-FROM alpine:3.5
+FROM alpine:3.9
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
-ARG VERSION
 
-RUN apk add --update ca-certificates openldap openldap-clients openldap-back-hdb openldap-back-bdb ldapvi bash && rm -rf /var/cache/apk/*
+RUN apk add \
+	--update \
+	ca-certificates \
+	openldap \
+	openldap-clients \
+	openldap-back-hdb \
+	openldap-back-bdb \
+	openldap-overlay-memberof \
+	ldapvi \
+	bash \
+	&& rm -rf /var/cache/apk/*
 
-COPY slapd.conf /etc/openldap/slapd.conf.template
-COPY DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
+COPY files/slapd.conf /etc/openldap/slapd.conf.template
+COPY files/DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
 
 ENV LDAP_SECRET 'S3CR3T'
 ENV LDAP_SUFFIX 'dc=example,dc=com'
@@ -13,7 +22,7 @@ ENV LDAP_ROOTDN 'cn=admin,dc=example,dc=com'
 
 EXPOSE 389 636
 
-COPY entrypoint.sh /usr/local/bin/
+COPY files/entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 #CMD ["slapd", "-d", "256", "-u", "ldap", "-g", "ldap"]
