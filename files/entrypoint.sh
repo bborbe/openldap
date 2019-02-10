@@ -24,8 +24,11 @@ if [ "$1" = 'slapd' ]; then
 	chmod 777 /run/openldap
 	chown -R ldap:ldap /run/openldap
 
-	echo "create slapd.conf"
-	cat /etc/openldap/slapd.conf.template | sed -e "$sed_script" > /etc/openldap/slapd.conf
+	echo "create /etc/openldap/slapd.conf"
+	cat /slapd.conf.template | sed -e "$sed_script" > /etc/openldap/slapd.conf
+
+	echo "create /var/lib/openldap/openldap-data/DB_CONFIG"
+	cp /DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
 
 	echo "starting openldap $@"
 fi

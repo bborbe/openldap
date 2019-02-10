@@ -13,8 +13,8 @@ RUN apk add \
 	bash \
 	&& rm -rf /var/cache/apk/*
 
-COPY files/slapd.conf /etc/openldap/slapd.conf.template
-COPY files/DB_CONFIG /var/lib/openldap/openldap-data/DB_CONFIG
+COPY files/slapd.conf /slapd.conf.template
+COPY files/DB_CONFIG /DB_CONFIG
 
 ENV LDAP_SECRET 'S3CR3T'
 ENV LDAP_SUFFIX 'dc=example,dc=com'

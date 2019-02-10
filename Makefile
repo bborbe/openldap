@@ -7,7 +7,7 @@ clean:
 	docker rmi $(REGISTRY)/bborbe/openldap:$(VERSION)
 
 build:
-	docker build --build-arg VERSION=$(VERSION) --no-cache --rm=true -t $(REGISTRY)/bborbe/openldap:$(VERSION) .
+	docker build --no-cache --rm=true -t $(REGISTRY)/bborbe/openldap:$(VERSION) .
 
 run:
 	docker run \
