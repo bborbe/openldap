@@ -1,4 +1,4 @@
-VERSION ?= latest
+VERSION ?= 1.3.0
 REGISTRY ?= docker.io
 
 default: build
