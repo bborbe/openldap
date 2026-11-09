@@ -10,7 +10,9 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
-- feat: Add hack/cluster-alias.sh and hack/build-cluster.sh for cluster builds
+- feat: add `BUILD_TARGET` selector to `make build` — `local` (default) keeps plain `docker build`; a cluster target renders `hack/build-job.yaml`, applies it, and waits for the Job
+- feat: add `hack/build-job.yaml`, `hack/build-cluster-bootstrap.sh` and `hack/dockerconfig.json.tpl` alongside `hack/build-cluster.sh` and `hack/cluster-alias.sh`
+- feat: `make upload` and `make clean` are no-ops for a cluster target
 
 ## 1.3.1
 
