@@ -3,6 +3,19 @@ REGISTRY ?= docker.io
 IMAGE ?= bborbe/openldap
 default: build
 
+# Container-safe gates. The dark-factory pipeline runs `make precommit` as its
+# authoritative validation command and `make test` as its iteration command, and
+# neither may shell out to Docker — the YOLO container has no daemon. Both run
+# before the cluster build arm exists, so they tolerate a missing hack/ tree.
+.PHONY: precommit test
+
+precommit:
+	@for f in hack/*.sh; do [ -e "$$f" ] || continue; bash -n "$$f"; done
+	@make -n build >/dev/null
+
+test:
+	@echo "no unit tests — this repo ships a Dockerfile and build scripts only"
+
 clean:
 	docker rmi $(REGISTRY)/$(IMAGE):$(VERSION)
 

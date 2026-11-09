@@ -105,7 +105,7 @@ The deployment already depends on this image being reproducible elsewhere: `nuke
 8. `BUILD_TARGET=local` never touches a cluster: no Job is created, no kubeconfig is required, and the target works on a machine with no cluster credentials.
 9. The Job is named `build-<TAG>`, lowercased and sanitised to a DNS-1123 name, so a run can be located by the tag it produced.
 10. `upload` and `clean` print `nothing to do` and exit 0 when `BUILD_TARGET` is not `local` — otherwise a cluster build followed by `make clean` would `docker rmi` the unrelated local `1.3.0` image.
-11. `make precommit` and `make test` exist and are container-safe: `precommit` runs `bash -n` over the three `hack/` scripts and `make -n build`, and neither target invokes `docker`.
+11. `make precommit` and `make test` exist and are container-safe: `precommit` runs `bash -n` over the three `hack/` scripts and `make -n build`, and neither target invokes `docker`. Both land in a bootstrap commit before any prompt runs — the pipeline's preflight executes `make precommit` before the prompt container starts, so a prompt that creates them is too late.
 
 ## Constraints
 
@@ -117,7 +117,8 @@ The deployment already depends on this image being reproducible elsewhere: `nuke
 - No new runtime dependency in the built image. This change is build tooling only.
 - The local path must work with no kubeconfig and no cluster credentials present.
 - `docs/dod.md`'s "`make build` succeeds" is a host-side check: the dark-factory container has no Docker daemon, so a prompt must not treat its inability to run `docker build` as a failure. `make -n build` and the `bash -n` checks are the container-executable substitutes.
-- **`make precommit` and `make test` are the pipeline's gates and neither exists in this repository today.** `.dark-factory.yaml` leaves `validationCommand: make precommit` and `testCommand: make test` at their dark-factory defaults, so a prompt completes only if `make precommit` exits 0 — and it currently fails with `No rule to make target`. Both targets must be added and must stay Docker-free, since the container has no daemon.
+- **`make precommit` and `make test` are the pipeline's gates and both land in a bootstrap commit before any prompt runs.** `.dark-factory.yaml` leaves `validationCommand: make precommit` and `testCommand: make test` at their dark-factory defaults, and preflight executes `make precommit` *before* the prompt container starts. Both targets are therefore added up front and must stay Docker-free, since the container has no daemon.
+- **No Go-specific plugin documentation.** This repo ships a `Dockerfile` and build scripts, not Go code. Prompts must not cite `coding/docs/go-makefile-commands.md` or any other language-specific plugin doc, and `make test` is intentionally a no-op rather than a test suite.
 - The five `hack/` files are copied from the pinned refs with their comments and hardening intact; the repository-specific values (image, repo URL) come from the Makefile environment, not from edits to the scripts. One inherited comment in `build-job.yaml` refers to a release-to-image dispatcher this repo does not have — that inaccuracy is accepted rather than edited, to keep the copy byte-faithful.
 - **Reference**: the canonical procedure is `bborbe/go-skeleton` `docs/build-migration-guide.md` at `eb050aa20bb6194d8af7e47baf8880df789bd1ca`. This repo deliberately diverges in two places — the local arm stays plain `docker build` (the guide mandates `buildx` with `rewrite-timestamp`), and `VERSION` keeps `?= 1.3.0` (the guide has no default). A prompt must not "correct" either divergence.
 
@@ -157,9 +158,8 @@ The deployment already depends on this image being reproducible elsewhere: `nuke
 | 3 | `BUILD_TARGET` selector, local-arm freeze, defaulted-`VERSION` guard | 1, 4, 8 | 1, 2, 3 | prompts 1–2 |
 | 4 | Cluster branch wiring: render, apply, wait, report; Job naming | 2, 3, 9 | 4, 5, 6 | prompt 3 |
 | 5 | `upload` / `clean` no-ops and the `## Unreleased` entry | 10 | 8, 9 | prompt 3 |
-| 6 | `precommit` / `test` targets, Docker-free | 11 | 10 | prompt 3 |
 
-Rationale: prompts 1 and 2 are verbatim copies of static files with no behaviour change and are independently verifiable; prompt 3 edits only the local arm and the guard and is independently testable with `make -n`; prompt 4 is the only prompt that shells out to a cluster; prompt 5 is small and orthogonal. The operator-executable rung runs after merge, so no prompt depends on a cluster being reachable.
+Rationale: prompts 1 and 2 are verbatim copies of static files with no behaviour change and are independently verifiable; prompt 3 edits only the local arm and the guard and is independently testable with `make -n`; prompt 4 is the only prompt that shells out to a cluster; prompt 5 is small and orthogonal. **DB11 / AC10 (`precommit`, `test`) are already satisfied by a bootstrap commit** — the pipeline's preflight runs `make precommit` before any prompt container starts, so they cannot be created by a prompt. The operator-executable rung runs after merge, so no prompt depends on a cluster being reachable.
 
 **How prompts 1 and 2 obtain the bodies.** The prompt-creator runs on the host, not in the container. It reads each file at generation time with `git -C ~/Documents/workspaces/agent-task-executor show 91a7e64e160f30be8af0aea64635e1e11bc86731:hack/<file>` (and `git -C ~/Documents/workspaces/go-skeleton show eb050aa20bb6194d8af7e47baf8880df789bd1ca:hack/<file>` for `build-cluster-bootstrap.sh` and `dockerconfig.json.tpl`) and inlines the content into the prompt body. The executing container must never be asked to reach either repository. If generation is ever containerised, the fallback is to land the five bodies under `docs/` in this repo first and have the prompt copy from there.
 
