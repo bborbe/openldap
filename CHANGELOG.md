@@ -8,7 +8,7 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
-## Unreleased
+## 1.4.0
 
 - feat: add `BUILD_TARGET` selector to `make build` — `local` (default) keeps plain `docker build`; a cluster target renders `hack/build-job.yaml`, applies it, and waits for the Job
 - feat: add `hack/build-job.yaml`, `hack/build-cluster-bootstrap.sh` and `hack/dockerconfig.json.tpl` alongside `hack/build-cluster.sh` and `hack/cluster-alias.sh`
