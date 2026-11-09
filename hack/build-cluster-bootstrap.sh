@@ -59,9 +59,19 @@ TV_USER="$(teamvault-cli username --teamvault-config "${TEAMVAULT}" --teamvault-
 TV_PASS="$(teamvault-cli password --teamvault-config "${TEAMVAULT}" --teamvault-key="${TEAMVAULT_KEY}")"
 [ -n "${TV_USER}" ] && [ -n "${TV_PASS}" ] || die "teamvault returned an empty credential for key ${TEAMVAULT_KEY}"
 
+# A credential is arbitrary text, and this renders it into a JSON document by
+# hand. `printf %s` does not escape, so a password containing a quote or a
+# backslash produces malformed JSON — which kubectl rejects at secret-creation
+# time, or worse accepts and then fails at push with a 401 that names nothing.
+# Backslash first, then quote: the reverse order would double-escape the
+# backslashes the quote pass just introduced.
+json_escape() {
+	printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
+}
+
 # docker.io's canonical auths key, per the template.
 printf '{"auths":{"https://index.docker.io/v1/":{"username":"%s","password":"%s"}}}' \
-	"${TV_USER}" "${TV_PASS}" >"${RENDERED}"
+	"$(json_escape "${TV_USER}")" "$(json_escape "${TV_PASS}")" >"${RENDERED}"
 unset TV_USER TV_PASS
 [ -s "${RENDERED}" ] || die "failed to render ${TEMPLATE}"
 

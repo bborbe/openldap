@@ -8,7 +8,6 @@ BUILD_TARGET ?= local
 # carries no SSH key.
 REPO_URL ?= https://github.com/bborbe/openldap.git
 REF ?= HEAD
-NAMESPACE ?= build
 DOCKERFILE ?= Dockerfile
 PUSH ?= true
 PUSH_SECRET ?= buildkit-push
@@ -50,12 +49,19 @@ else
 # The defaulted-VERSION guard sits inside this branch only: VERSION is assigned
 # in this file, so $(origin VERSION) reads `file` on every bare `make build` and
 # a parse-time guard would refuse the local arm instead.
+#
+# The block below is hack/build-cluster.sh's documented environment contract.
+# DOCKER_REGISTRY is part of it even though build-job.yaml carries no
+# __DOCKER_REGISTRY__ token: the script whitelists and substitutes it, and the
+# composed-reference probe in the spec reads it back off `make -n build`. Only
+# the variables the script actually consumes are passed — NAMESPACE is not,
+# because the rendered manifest's own `namespace:` decides it and the script
+# overrides whatever it was given.
 build:
 ifeq ($(origin VERSION),file)
 	$(error the cluster arm needs an explicit VERSION; pass VERSION=<tag> on the make command line)
 else
 	BUILD_TARGET='$(BUILD_TARGET)' \
-	NAMESPACE='$(NAMESPACE)' \
 	REPO_URL='$(REPO_URL)' \
 	REF='$(REF)' \
 	TAG='$(VERSION)' \
