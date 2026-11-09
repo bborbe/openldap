@@ -20,9 +20,15 @@ default: build
 # neither may shell out to Docker — the YOLO container has no daemon.
 .PHONY: precommit test build upload clean run shell
 
+# Both arms are expanded, not just the local one: a typo in the cluster recipe
+# is otherwise invisible here and only surfaces at `make build BUILD_TARGET=…`.
+# `-n` prints the recipe without running it, so no Job is created and no
+# kubeconfig is needed. VERSION is on the command line, which is what lets the
+# defaulted-VERSION guard pass.
 precommit:
 	@for f in hack/*.sh; do [ -e "$$f" ] || continue; bash -n "$$f"; done
 	@make -n build >/dev/null
+	@make -n build BUILD_TARGET=sun VERSION=test >/dev/null
 
 test:
 	@echo "no unit tests — this repo ships a Dockerfile and build scripts only"

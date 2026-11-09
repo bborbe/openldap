@@ -69,6 +69,16 @@ json_escape() {
 	printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
 }
 
+# The two characters json_escape handles are the ones a password plausibly
+# contains. Every other RFC 8259 hazard is a control byte (below 0x20), and
+# those are rejected rather than escaped: a control character in a registry
+# credential is a bug in what teamvault returned, and silently emitting
+# \u000a would hide it behind a 401 at push time. Failing here names the
+# problem while the operator is still watching the bootstrap run.
+case "${TV_USER}${TV_PASS}" in
+*[[:cntrl:]]*) die "teamvault credential contains a control character; refusing to render ${TEMPLATE}" ;;
+esac
+
 # docker.io's canonical auths key, per the template.
 printf '{"auths":{"https://index.docker.io/v1/":{"username":"%s","password":"%s"}}}' \
 	"$(json_escape "${TV_USER}")" "$(json_escape "${TV_PASS}")" >"${RENDERED}"
