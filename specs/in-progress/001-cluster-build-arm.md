@@ -151,17 +151,15 @@ The deployment already depends on this image being reproducible elsewhere: `nuke
 
 ## Suggested Decomposition
 
+**One prompt, deliberately.** The whole change is five static files copied verbatim plus one Makefile branch; splitting it produced four prompts whose commits were each discarded by dark-factory's post-execution `FetchBranch` step under `workflow: worktree` (see `# Progress` on the task). A single prompt has no second fetch to fail on.
+
 | # | Prompt focus | Covers DBs | Covers ACs | Depends on |
 |---|---|---|---|---|
-| 1 | Copy `hack/build-cluster.sh` and `hack/cluster-alias.sh` verbatim from `agent-task-executor@91a7e64` (bodies inlined into the prompt) | 5, 6 | 7 | — |
-| 2 | Copy `hack/build-job.yaml` from `agent-task-executor@91a7e64` and `hack/build-cluster-bootstrap.sh` + `hack/dockerconfig.json.tpl` from `go-skeleton@eb050aa` (bodies inlined) | 5, 6, 7 | 7 | — |
-| 3 | `BUILD_TARGET` selector, local-arm freeze, defaulted-`VERSION` guard | 1, 4, 8 | 1, 2, 3 | prompts 1–2 |
-| 4 | Cluster branch wiring: render, apply, wait, report; Job naming | 2, 3, 9 | 4, 5, 6 | prompt 3 |
-| 5 | `upload` / `clean` no-ops and the `## Unreleased` entry | 10 | 8, 9 | prompt 3 |
+| 1 | Copy the five `hack/` files verbatim from the pinned refs, add the `BUILD_TARGET` selector + cluster branch + defaulted-`VERSION` guard to the Makefile, make `upload`/`clean` no-ops for a cluster target, and add the `## Unreleased` entry | 1–10 | 1–9 | — |
 
-Rationale: prompts 1 and 2 are verbatim copies of static files with no behaviour change and are independently verifiable; prompt 3 edits only the local arm and the guard and is independently testable with `make -n`; prompt 4 is the only prompt that shells out to a cluster; prompt 5 is small and orthogonal. **DB11 / AC10 (`precommit`, `test`) are already satisfied by a bootstrap commit** — the pipeline's preflight runs `make precommit` before any prompt container starts, so they cannot be created by a prompt. The operator-executable rung runs after merge, so no prompt depends on a cluster being reachable.
+**How the prompt obtains the bodies.** The prompt-creator runs on the host, not in the container. It reads each file at generation time with `git -C ~/Documents/workspaces/agent-task-executor show 91a7e64e160f30be8af0aea64635e1e11bc86731:hack/<file>` (and `git -C ~/Documents/workspaces/go-skeleton show eb050aa20bb6194d8af7e47baf8880df789bd1ca:hack/<file>` for `build-cluster-bootstrap.sh` and `dockerconfig.json.tpl`) and inlines the content into the prompt body. The executing container must never be asked to reach either repository. If generation is ever containerised, the fallback is to land the five bodies under `docs/` in this repo first and have the prompt copy from there.
 
-**How prompts 1 and 2 obtain the bodies.** The prompt-creator runs on the host, not in the container. It reads each file at generation time with `git -C ~/Documents/workspaces/agent-task-executor show 91a7e64e160f30be8af0aea64635e1e11bc86731:hack/<file>` (and `git -C ~/Documents/workspaces/go-skeleton show eb050aa20bb6194d8af7e47baf8880df789bd1ca:hack/<file>` for `build-cluster-bootstrap.sh` and `dockerconfig.json.tpl`) and inlines the content into the prompt body. The executing container must never be asked to reach either repository. If generation is ever containerised, the fallback is to land the five bodies under `docs/` in this repo first and have the prompt copy from there.
+**DB11 / AC10 (`precommit`, `test`) are already satisfied by a bootstrap commit** — the pipeline's preflight runs `make precommit` before any prompt container starts, so they cannot be created by a prompt. The operator-executable rung runs after merge, so no prompt depends on a cluster being reachable.
 
 ## Do-Nothing Option
 
