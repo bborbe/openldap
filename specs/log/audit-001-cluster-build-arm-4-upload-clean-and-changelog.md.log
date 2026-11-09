@@ -1,0 +1,274 @@
+[12:30:38] [init] session=26f6a867 model=deepseek-v4-flash-max[1m] cwd=/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09 tools=25
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:39] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] [system: thinking_tokens]
+[12:30:40] 💭 The user wants me to invoke the prompt-auditor agent via Task tool with subagent_type prompt-auditor. The actual available agent type is `dark-factory:prompt-auditor`. Let me invoke it.
+
+Path is prompts/4-upload-clean-and-changelog.md — has prompts/ prefix and .md extension.
+
+Let me also check the project CLAUDE.md for a Release Checklist gate. I'll launch the agent and read CLAUDE.md in parallel.
+
+Wait, instructions say invoke through Task tool. The Agent tool is the equivalent. Let me do both …
+[12:30:40] I'll audit the prompt and check the project's release gate in parallel.
+
+
+[12:30:46] [agent:dark-factory:prompt-auditor] Audit dark-factory prompt
+    prompt: Audit the dark-factory prompt file at `prompts/4-upload-clean-and-changelog.md`.\n\nWorking directory: /home/node/.cache/github-dark-factory-agent/work/c087227…
+[12:30:46] [system: task_started]
+[12:30:46] $ ls -la /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/CLAUDE.md /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/.dark-fact…
+[12:30:50] [system: task_progress]
+[12:30:50] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/4-upload-clean-and-changelog.md
+[12:30:50] [system: task_progress]
+[12:30:50] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/in-progress/001-cluster-build-arm.md
+[12:30:50] [system: task_progress]
+[12:30:50] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/completed/002-copy-build-job-and-bootstrap.md
+[12:30:50] [system: task_progress]
+[12:30:50] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/in-progress/003-makefile-build-target.md
+[12:30:50] [system: task_progress]
+[12:30:50] $ dark-factory config 2>&1 | head -100; echo "---EXIT:$?"
+[12:30:50]   → 127 lines read
+[12:30:50]   → 363 lines read
+[12:30:50]   → 160 lines read
+[12:30:50]   → 171 lines read
+[12:30:57] [system: task_progress]
+[12:30:57] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/Makefile
+[12:30:57] [system: task_progress]
+[12:30:57] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/CHANGELOG.md
+[12:30:57] [system: task_progress]
+[12:30:57] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/.dark-factory.yaml
+[12:30:57] [system: task_progress]
+[12:30:57] $ ls -la hack/ 2>&1; echo '---REMOTE---'; git remote get-url origin 2>&1; echo '---STATUS---'; git status --porcelain 2>&1 | head -40; echo '---HIDEGIT---'; grep -nE 'hideGit|workflow' .dark-factory.ya…
+[12:30:57]   → 5 lines read
+[12:30:57]   → 30 lines read
+[12:30:57]   → 37 lines read
+[12:31:18] [system: task_progress]
+[12:31:18] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== docs/dod.md exists ==='; ls -l docs/dod.md 2>&1\necho '=== branches ==='; git branch -a 2>&1 | head…
+[12:31:18] [system: task_progress]
+[12:31:18] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== bare git commands in prompt ==='; grep -nE '^\s*git\s|`git |git (clone|push|commit|diff|log|status|…
+[12:31:25] [system: task_progress]
+[12:31:25] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== refs containing prompt2 commit ==='; git branch -a --contains 6fe25ae 2>&1\necho '=== show 6fe25ae …
+[12:31:25] [system: task_progress]
+[12:31:25] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== prompt3 log ==='; tail -40 prompts/log/003-makefile-build-target.log 2>&1\necho '=== docs/dod.md ==…
+[12:31:39] [system: task_progress]
+[12:31:39] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== prompt2 CHANGELOG diff ==='; git show 6fe25ae -- CHANGELOG.md 2>&1\necho '=== CHANGELOG on dark-fac…
+[12:31:39] [system: task_progress]
+[12:31:39] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== prompt3 jsonl last entries ==='; tail -5 prompts/log/003-makefile-build-target.jsonl 2>&1\necho '==…
+[12:31:39] ⚠ [bash output]
+{"type":"system","subtype":"thinking_tokens","estimated_tokens":380,"estimated_tokens_delta":2,"uuid":"c4cbff9d-8f9d-49b5-b0aa-d030fcd06000","session_id":"c1a67553-8090-4021-b57a-a3e82e959ff0"}
+{"type":"assistant","message":{"id":"msg_e81e3ee6b2c640f787f464a1","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"Everything matches requirements. Let me consider quality criteria:\n- `make build` succeeds: can't run docker in container (explicitly told not to run docker). But default local arm is byte-for-byte unchanged, so it's as good as before. The DoD criterion \"make build succeeds\" — we cannot verify in container. Should we mark as blocker? The prompt says constraints: \"Do not run docker, kubectl, or hack/build-cluster.sh; only make -n, the guard path, and static checks are available in this container.\" The verification section does not require running make build. So we should not mark as blocker; it's unchanged behavior. I'll note it as passing (local recipe unchanged, syntax validated by make -n).\n- No new build warnings: N/A.\n- Follows existing layout under files/: no changes to files/.\n- No secrets: none.\n- No absolute paths: none.\n\nAll criteria met. status success.\n\nOne more consideration: `make precommit` internally runs `make -n build` which works. Good.\n\nLet me also double check the guard behavior when VERSION set via environment? Requirement only says default. `$(origin VERSION)` returns \"environment\" if exported. That's fine — not \"file\", so it allows. Requirement only refuses a tag that came from the Makefile default. Good.\n\nNow produce the completion report exactly. No extra output after.\n\nThe verification command is `make precommit` with exitCode 0.\n\nLet me write the final report.","signature":"llm-proxy"}],"model":"deepseek-v4-flash-max","stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":0,"output_tokens":0,"cache_creation_input_tokens":0,"cache_read_input_tokens":0},"context_management":null},"parent_tool_use_id":null,"session_id":"c1a67553-8090-4021-b57a-a3e82e959ff0","uuid":"d4b3ff08-a496-4f0d-86fc-9bf317b59730"}
+{"type":"assistant","message":{"id":"msg_e81e3ee6b2c640f787f464a1","type":"message","role":"assistant","content":[{"type":"text","text":"All verification commands pass, `make test` and `make precommit` both exit 0, and the diff is limited to `Makefile` and `CHANGELOG.md`.\n\nQuality criteria: local `build` recipe is byte-for-byte unchanged and syntactically validated via `make -n` (Docker execution is unavailable by constraint); no new warnings; no files/ layout changes; no secrets; no absolute paths.\n\n<!-- DARK-FACTORY-REPORT\n{\"status\":\"success\",\"summary\":\"Added a BUILD_TARGET selector to make build (default local preserves the docker build recipe; cluster arm invokes hack/build-cluster.sh and refuses a defaulted VERSION), and added an Unreleased changelog entry.\",\"blockers\":[],\"verification\":{\"command\":\"make precommit\",\"exitCode\":0}}\nDARK-FACTORY-REPORT -->"}],"model":"deepseek-v4-flash-max","stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":0,"output_tokens":0,"cache_creation_input_tokens":0,"cache_read_input_tokens":0},"context_management":null},"parent_tool_use_id":null,"session_id":"c1a67553-8090-4021-b57a-a3e82e959ff0","uuid":"79863b27-af61-4533-9daf-30caee782292"}
+{"type":"result","subtype":"success","is_error":false,"api_error_status":null,"duration_ms":41828,"duration_api_ms":41794,"ttft_ms":1526,"ttft_stream_ms":1246,"time_to_request_ms":96,"num_turns":25,"result":"All verification commands pass, `make test` and `make precommit` both exit 0, and the diff is limited to `Makefile` and `CHANGELOG.md`.\n\nQuality criteria: local `build` recipe is byte-for-byte unchanged and syntactically validated via `make -n` (Docker execution is unavailable by constraint); no new warnings; no files/ layout changes; no secrets; no absolute paths.\n\n<!-- DARK-FACTORY-REPORT\n{\"status\":\"success\",\"summary\":\"Added a BUILD_TARGET selector to make build (default local preserves the docker build recipe; cluster arm invokes hack/build-cluster.sh and refuses a defaulted VERSION), and added an Unreleased changelog entry.\",\"blockers\":[],\"verification\":{\"command\":\"make precommit\",\"exitCode\":0}}\nDARK-FACTORY-REPORT -->","stop_reason":"end_turn","session_id":"c1a67553-8090-4021-b57a-a3e82e959ff0","total_cost_usd":0.6911349999999999,"usage":{"input_tokens":1060,"cache_creation_input_tokens":48000,"cache_read_input_tokens":484608,"output_tokens":4810,"server_tool_use":{"web_search_requests":0,"web_fetch_requests":0},"service_tier":"standard","cache_creation":{"ephemeral_1h_input_tokens":0,"ephemeral_5m_input_tokens":0},"inference_geo":"","iterations":[],"speed":"standard"},"modelUsage":{"deepseek-v4-flash-max[1m]":{"inputTokens":1135,"outputTokens":4916,"cacheReadInputTokens":485120,"cacheCreationInputTokens":51200,"webSearchRequests":0,"costUSD":0.6911349999999999,"contextWindow":1000000,"maxOutputTokens":32000}},"permission_denials":[],"terminal_reason":"completed","fast_mode_state":"off","uuid":"ba361ae6-a20b-481e-81cb-8a6dcc7a020f"}
+=== search worktrees on disk ===
+total 12
+drwxr-xr-x 3 node node 4096 Nov  9 12:11 .
+drwxr-x--- 4 node node 4096 Nov  9 12:11 ..
+drwxr-xr-x 8 node node 4096 Nov  9 12:11 c087227e-68f1-5278-982a-d8b84dae1f09
+=== find any Makefile with BUILD_TARGET in work dirs ===
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/completed/003-makefile-build-target.md
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/4-upload-clean-and-changelog.md
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/log/003-makefile-build-target.log
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/audit-001-cluster-build-arm-3-makefile-build-target.md.log
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/audit-001-cluster-build-arm-2-copy-build-job-and-bootstrap.md.jsonl
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/audit-001-cluster-build-arm-4-upload-clean-and-changelog.md.jsonl
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/log/003-makefile-build-target.jsonl
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/audit-001-cluster-build-arm-3-makefile-build-target.md.jsonl
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/gen-001-cluster-build-arm.log
+/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/specs/log/gen-001-cluster-build-arm.jsonl
+[12:31:44] [system: task_progress]
+[12:31:44] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== prompt3 commit stat ==='; git show --stat --oneline 4a3ba2e 2>&1\necho '=== prompt3 CHANGELOG diff …
+[12:31:44] ⚠ [bash output]
+=== CHANGELOG at prompt3 head ===
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+Please choose versions by [Semantic Versioning](http://semver.org/).
+
+* MAJOR version when you make incompatible API changes,
+* MINOR version when you add functionality in a backwards-compatible manner, and
+* PATCH version when you make backwards-compatible bug fixes.
+
+## Unreleased
+
+- feat: Add hack/cluster-alias.sh and hack/build-cluster.sh for cluster builds
+- feat: Add hack/build-job.yaml, hack/build-cluster-bootstrap.sh, and hack/dockerconfig.json.tpl for cluster builds
+- feat: Add BUILD_TARGET selector to make build for cluster builds via hack/build-cluster.sh
+
+## 1.3.1
+
+- chore(dark-factory): worktree workflow with PR delivery
+[12:32:10] [system: task_progress]
+[12:32:10] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== build-cluster.sh markers (current tree) ==='; grep -c 'contains a newline' hack/build-cluster.sh; g…
+[12:32:18] [system: task_progress]
+[12:32:18] $ tmp=$(mktemp -d); cat > "$tmp/Makefile" <<'EOF'\nVERSION ?= 1.3.0\nREGISTRY ?= docker.io\nIMAGE ?= bborbe/openldap\nBUILD_TARGET ?= local\n\nupload:\nifeq ($(BUILD_TARGET),local)\n	docker push $(REGI…
+[12:33:02] [system: task_progress]
+[12:33:02] $ cd /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09\necho '=== Makefile upload/clean lines have leading TAB? ==='; grep -nP '^\t(docker push|docker rmi)' Makefile…
+[12:34:04] [system: task_updated]
+[12:34:04] [system: task_notification]
+[12:34:04]   ← agent reply: # Prompt Audit Report: Upload/clean no-ops + changelog
+[12:34:05] [system: thinking_tokens]
+[12:34:05] [system: thinking_tokens]
+[12:34:05] [system: thinking_tokens]
+[12:34:05] [system: thinking_tokens]
+[12:34:05] 💭 There's no CLAUDE.md at root. Let me check for CLAUDE.md anywhere, and read .dark-factory.yaml. Also check autoRelease setting.
+[12:34:05] No root `CLAUDE.md`. Let me check for any project CLAUDE.md and the dark-factory config.
+
+
+[12:34:07] $ echo "=== .dark-factory.yaml ==="; cat .dark-factory.yaml; echo; echo "=== CLAUDE.md files ==="; find . -name 'CLAUDE.md' -not -path './.git/*' 2>/dev/null; echo "=== gate grep ==="; grep -rn -i "rel…
+[12:34:08] [system: thinking_tokens]
+[12:34:08] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] [system: thinking_tokens]
+[12:34:09] 💭 No CLAUDE.md anywhere, no release checklist, no "prompt approve" instructions. autoRelease: false, so approval does not auto-ship — but still no declared gate. So gate status: none declared.
+
+Let me present the audit findings and gate status. The agent already produced a detailed report. I should relay it concisely but completely — the user needs findings, severity, score, recommendations, and gate status.
+
+I should present the report. Since the agent's final message is returned as tool result a…
+[12:34:17] ## Audit: `prompts/4-upload-clean-and-changelog.md`
+
+**Score: 5/10 — Needs Improvement**
+
+### Critical findings
+
+**1. Requirement 3 is written against a stale snapshot — would delete existing changelog entries.**
+By execution time, `## Unreleased` holds three bullets (added by prompts 001, 002, 003). Requirement 3 says it "already exists with one bullet" and its "result begins" block shows only bullet 1 + a new one, immediately followed by `## 1.3.1`. Following it literally deletes bullets 2 and 3. The proposed new bullet also duplicates prompt 003's `BUILD_TARGET` bullet.
+
+Fix: rewrite req 3 to preserve all existing bullets and append exactly:
+```
+- feat: Make upload and clean no-ops for non-local BUILD_TARGET
+```
+Also update `<context>` line 23 ("already exists with one bullet") to reflect the prior bullets.
+
+Root cause note: prompt 003 added a `BUILD_TARGET` changelog bullet its own requirements didn't ask for, and prompt 002 edited `CHANGELOG.md` despite "Do not modify any other file."
+
+**2. CHANGELOG verification is a false positive.**
+`grep -A6 '^## Unreleased' | grep -c 'BUILD_TARGET'` and the conventional-prefix grep already match prompt 003's bullet, so they pass even if prompt 4 never touches the file. It also never asserts prior bullets survive.
+
+Fix: assert the exact new bullet with `grep -qF -- '- feat: Make upload and clean no-ops for non-local BUILD_TARGET'`, plus `grep -qF` checks for the prior three bullets' text.
+
+### Recommendations
+
+- **R1 (medium):** Add bare-invocation tests (`make -n upload` / `make -n clean`, no `BUILD_TARGET`) to prove the `BUILD_TARGET ?= local` default still routes to Docker — the "local unchanged" contract is otherwise untested.
+- **R2 (low):** Remove `branch:` from the inbox frontmatter; inbox prompts may only carry `spec`, `status`, `created`, `issue`.
+- **R3 (low):** Reword `<objective>` — it reads as if no `BUILD_TARGET` changelog entry exists.
+- **R4 (optional):** The consolidated acceptance sweep re-verifies AC7 markers and the local `build` line already covered by prompts 002/003. Keep only if intentional as a final gate.
+
+### What's solid
+- `ifeq`-inside-recipe for `upload`/`clean` is valid GNU make; literal tabs verified.
+- Container-autonomous: no kubectl/docker execution; cluster-target echo paths are daemon-free.
+- No bare `git` commands despite `workflow: worktree`.
+- Correct `spec:` frontmatter, allowed `4-` ordering prefix, correct inbox placement, `status: draft`.
+- Correctly excludes language-specific plugin docs (no Go in repo).
+
+### Code references verified
+All paths/symbols check out (`Makefile:19-26`, `hack/build-cluster.sh`, `hack/cluster-alias.sh`, `docs/dod.md`, `.dark-factory.yaml`). The `hack/build-job.yaml` / bootstrap / dockerconfig refs exist on the `dark-factory/cluster-build-arm` branch (commit `6fe25ae`), not in this detached worktree — correct for prompt 4's execution branch.
+
+---
+
+## Pre-approve gate status: **none declared**
+
+- No `CLAUDE.md` anywhere in the repo (root or nested).
+- No "Release Checklist" section or any "before `dark-factory prompt approve`" instruction in any Markdown file.
+- `.dark-factory.yaml` sets `autoRelease: false`, so approval does **not** auto-ship — but since no gate is declared, there is nothing to walk.
+
+**Bottom line:** The prompt is not approval-ready — Critical 1 (destructive changelog instruction) and Critical 2 (false-positive verification) should be fixed first. The Makefile change itself is correct and low-risk.
+[12:34:17] result: ## Audit: `prompts/4-upload-clean-and-changelog.md`
+
+**Score: 5/10 — Needs Improvement**
+
+### Critical findings
+
+**1. Requirement 3 is written against a stale snapshot — would delete existing changelog entries.**
+By execution time, `## Unreleased` holds three bullets (added by prompts 001, 002, 003). Requirement 3 says it "already exists with one bullet" and its "result begins" block shows only bullet 1 + a new one, immediately followed by `## 1.3.1`. Following it literally deletes bullets 2 and 3. The proposed new bullet also duplicates prompt 003's `BUILD_TARGET` bullet.
+
+Fix: rewrite req 3 to preserve all existing bullets and append exactly:
+```
+- feat: Make upload and clean no-ops for non-local BUILD_TARGET
+```
+Also update `<context>` line 23 ("already exists with one bullet") to reflect the prior bullets.
+
+Root cause note: prompt 003 added a `BUILD_TARGET` changelog bullet its own requirements didn't ask for, and prompt 002 edited `CHANGELOG.md` despite "Do not modify any other file."
+
+**2. CHANGELOG verification is a false positive.**
+`grep -A6 '^## Unreleased' | grep -c 'BUILD_TARGET'` and the conventional-prefix grep already match prompt 003's bullet, so they pass even if prompt 4 never touches the file. It also never asserts prior bullets survive.
+
+Fix: assert the exact new bullet with `grep -qF -- '- feat: Make upload and clean no-ops for non-local BUILD_TARGET'`, plus `grep -qF` checks for the prior three bullets' text.
+
+### Recommendations
+
+- **R1 (medium):** Add bare-invocation tests (`make -n upload` / `make -n clean`, no `BUILD_TARGET`) to prove the `BUILD_TARGET ?= local` default still routes to Docker — the "local unchanged" contract is otherwise untested.
+- **R2 (low):** Remove `branch:` from the inbox frontmatter; inbox prompts may only carry `spec`, `status`, `created`, `issue`.
+- **R3 (low):** Reword `<objective>` — it reads as if no `BUILD_TARGET` changelog entry exists.
+- **R4 (optional):** The consolidated acceptance sweep re-verifies AC7 markers and the local `build` line already covered by prompts 002/003. Keep only if intentional as a final gate.
+
+### What's solid
+- `ifeq`-inside-recipe for `upload`/`clean` is valid GNU make; literal tabs verified.
+- Container-autonomous: no kubectl/docker execution; cluster-target echo paths are daemon-free.
+- No bare `git` commands despite `workflow: worktree`.
+- Correct `spec:` frontmatter, allowed `4-` ordering prefix, correct inbox placement, `status: draft`.
+- Correctly excludes language-specific plugin docs (no Go in repo).
+
+### Code references verified
+All paths/symbols check out (`Makefile:19-26`, `hack/build-cluster.sh`, `hack/cluster-alias.sh`, `docs/dod.md`, `.dark-factory.yaml`). The `hack/build-job.yaml` / bootstrap / dockerconfig refs exist on the `dark-factory/cluster-build-arm` branch (commit `6fe25ae`), not in this detached worktree — correct for prompt 4's execution branch.
+
+---
+
+## Pre-approve gate status: **none declared**
+
+- No `CLAUDE.md` anywhere in the repo (root or nested).
+- No "Release Checklist" section or any "before `dark-factory prompt approve`" instruction in any Markdown file.
+- `.dark-factory.yaml` sets `autoRelease: false`, so approval does **not** auto-ship — but since no gate is declared, there is nothing to walk.
+
+**Bottom line:** The prompt is not approval-ready — Critical 1 (destructive changelog instruction) and Critical 2 (false-positive verification) should be fixed first. The Makefile change itself is correct and low-risk. | duration: 219108ms | cost: $1.4324 | tokens: 204 in / 1953 out

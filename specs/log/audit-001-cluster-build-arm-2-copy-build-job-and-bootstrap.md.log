@@ -1,0 +1,228 @@
+[12:24:19] [init] session=a6276c3f model=deepseek-v4-flash-max[1m] cwd=/home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09 tools=25
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] [system: thinking_tokens]
+[12:24:20] 💭 The user invoked /dark-factory:audit-prompt with args prompts/2-copy-build-job-and-bootstrap.md. I need to invoke the prompt-auditor agent via Agent tool with subagent_type dark-factory:prompt-auditor. Then check the project's declared pre-approve gate by reading CLAUDE.md.
+
+Let me first read the prompt file and CLAUDE.md? The instructions say invoke the agent. I can do both in parallel: Agent call and Read CLAUDE.md. Actually the agent will audit the prompt. I should also read CLAUDE.md for the…
+[12:24:20] I'll invoke the prompt-auditor agent and check the project's pre-approve gate in parallel.
+
+
+[12:24:22] [agent:dark-factory:prompt-auditor] Audit dark-factory prompt
+    prompt: Audit the dark-factory prompt file at `prompts/2-copy-build-job-and-bootstrap.md` against the Prompt Definition of Done.\n\nThe working directory is /home/node…
+[12:24:22] [system: task_started]
+[12:24:22] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/2-copy-build-job-and-bootstrap.md
+[12:24:22] $ ls CLAUDE.md .dark-factory.yaml 2>/dev/null; echo "---CLAUDE.md---"; cat CLAUDE.md 2>/dev/null | head -200
+[12:24:22]   → 361 lines read
+[12:24:24] [system: task_progress]
+[12:24:24] [read] /home/node/.cache/github-dark-factory-agent/work/c087227e-68f1-5278-982a-d8b84dae1f09/prompts/2-copy-build-job-and-bootstrap.md
+[12:24:24] [system: task_progress]
+[12:24:24] $ dark-factory config 2>&1 | head -100
+[12:24:24] [system: task_progress]
+[12:24:24] $ ls -la && echo "---DARK-FACTORY-YAML---" && cat .dark-factory.yaml 2>&1 | head -80
+[12:24:24]   → 361 lines read
+[12:24:30] [system: task_progress]
+[12:24:30] $ echo "===HACK===" && ls -la hack/ && echo "===PROMPTS===" && ls -la prompts/ && echo "===SPECS===" && ls -la specs/ specs/in-progress/ && echo "===DOCS===" && ls -la docs/
+[12:24:30] [system: task_progress]
+[12:24:30] $ echo "===MAKEFILE===" && cat Makefile && echo "===DOD===" && cat docs/dod.md
+[12:24:30] [system: task_progress]
+[12:24:30] $ for f in prompts/*.md; do echo "===== $f ====="; head -20 "$f"; done
+[12:24:35] [system: task_progress]
+[12:24:35] $ python3 - <<'EOF'\nimport re, hashlib\np='prompts/2-copy-build-job-and-bootstrap.md'\ns=open(p,encoding='utf-8').read()\nblocks=re.findall(r'```(\w*)\n(.*?)```', s, re.S)\nfor i,(lang,body) in enumer…
+[12:24:35] [system: task_progress]
+[12:24:35] $ echo "===build-cluster.sh refs===" && grep -n 'build-job\|cluster-alias\|SCRIPT_DIR' hack/build-cluster.sh && echo "===cluster-alias.sh===" && cat hack/cluster-alias.sh
+[12:24:35] [system: task_progress]
+[12:24:35] $ cat specs/in-progress/001-cluster-build-arm.md
+[12:24:35] ⚠ [bash output]
+- The init container sets `automountServiceAccountToken: false` and drops all capabilities; the build container carries no cluster credentials and cannot create, read or modify other resources.
+- `REF` is passed as a clone argument, not interpolated into a shell string, so a crafted ref cannot execute commands in the init container.
+
+## Suggested Decomposition
+
+| # | Prompt focus | Covers DBs | Covers ACs | Depends on |
+|---|---|---|---|---|
+| 1 | Copy `hack/build-cluster.sh` and `hack/cluster-alias.sh` verbatim from `agent-task-executor@91a7e64` (bodies inlined into the prompt) | 5, 6 | 7 | — |
+| 2 | Copy `hack/build-job.yaml` from `agent-task-executor@91a7e64` and `hack/build-cluster-bootstrap.sh` + `hack/dockerconfig.json.tpl` from `go-skeleton@eb050aa` (bodies inlined) | 5, 6, 7 | 7 | — |
+| 3 | `BUILD_TARGET` selector, local-arm freeze, defaulted-`VERSION` guard | 1, 4, 8 | 1, 2, 3 | prompts 1–2 |
+| 4 | Cluster branch wiring: render, apply, wait, report; Job naming | 2, 3, 9 | 4, 5, 6 | prompt 3 |
+| 5 | `upload` / `clean` no-ops and the `## Unreleased` entry | 10 | 8, 9 | prompt 3 |
+
+Rationale: prompts 1 and 2 are verbatim copies of static files with no behaviour change and are independently verifiable; prompt 3 edits only the local arm and the guard and is independently testable with `make -n`; prompt 4 is the only prompt that shells out to a cluster; prompt 5 is small and orthogonal. **DB11 / AC10 (`precommit`, `test`) are already satisfied by a bootstrap commit** — the pipeline's preflight runs `make precommit` before any prompt container starts, so they cannot be created by a prompt. The operator-executable rung runs after merge, so no prompt depends on a cluster being reachable.
+
+**How prompts 1 and 2 obtain the bodies.** The prompt-creator runs on the host, not in the container. It reads each file at generation time with `git -C ~/Documents/workspaces/agent-task-executor show 91a7e64e160f30be8af0aea64635e1e11bc86731:hack/<file>` (and `git -C ~/Documents/workspaces/go-skeleton show eb050aa20bb6194d8af7e47baf8880df789bd1ca:hack/<file>` for `build-cluster-bootstrap.sh` and `dockerconfig.json.tpl`) and inlines the content into the prompt body. The executing container must never be asked to reach either repository. If generation is ever containerised, the fallback is to land the five bodies under `docs/` in this repo first and have the prompt copy from there.
+
+## Do-Nothing Option
+
+`openldap`'s image keeps requiring this Mac. The repo stays in the un-migrated half of the build-cluster rollout, the goal's per-repo evidence row cannot be written, and the release path keeps its single point of failure. The mirror and the StatefulSet keep pulling an image that can only be cut by hand on one machine.
+[12:25:24] [system: task_progress]
+[12:25:24] $ echo "===GO FILES===" && find . -name '*.go' -not -path './.git/*' | head; echo "(none above means no Go)"; echo "===COMPLETED PROMPTS===" && ls -la prompts/completed/ prompts/in-progress/; echo "===…
+[12:25:24] [system: task_progress]
+[12:25:24] $ echo "===operator cmd scan (verification)===" && awk '/<verification>/,/<\/verification>/' prompts/2-copy-build-job-and-bootstrap.md | grep -nE '(docker |docker-compose |podman |make build|make buca|…
+[12:25:24] [system: task_progress]
+[12:25:24] $ echo "===build-cluster.sh header (context claim)==="; sed -n '1,35p' hack/build-cluster.sh
+[12:25:31] [system: task_progress]
+[12:25:31] $ echo "===== PROMPT 3 ====="; sed -n '1,200p' prompts/3-makefile-build-target.md; echo "===== PROMPT 4 ====="; sed -n '1,200p' prompts/4-upload-clean-and-changelog.md
+[12:25:31] ⚠ [bash output]
+- `test "$(grep -c '^## Unreleased' CHANGELOG.md)" -eq 1`
+- `test "$(grep -A6 '^## Unreleased' CHANGELOG.md | grep -c 'BUILD_TARGET')" -ge 1`
+- `grep -q 'hack/build-cluster.sh' CHANGELOG.md`
+- `grep -qE '^- (feat|fix|refactor|test|docs|chore|perf): .*BUILD_TARGET' CHANGELOG.md`
+- `grep -q '^## 1.3.1' CHANGELOG.md`
+
+Consolidated acceptance sweep (all five files present, parse, and carry the copied hardening):
+- `test -f hack/build-cluster.sh -a -f hack/cluster-alias.sh -a -f hack/build-job.yaml -a -f hack/build-cluster-bootstrap.sh -a -f hack/dockerconfig.json.tpl`
+- `for f in hack/*.sh; do bash -n "$f" || exit 1; done`
+- `test "$(grep -c 'contains a newline' hack/build-cluster.sh)" -ge 1`
+- `test "$(grep -c 'rendered_namespace' hack/build-cluster.sh)" -ge 1`
+- `test "$(grep -c 'automountServiceAccountToken: false' hack/build-job.yaml)" -ge 1`
+- `test "$(grep -c 'safe.directory' hack/build-job.yaml)" -ge 1`
+- `test "$(grep -c 'oci-worker-no-process-sandbox' hack/build-job.yaml)" -ge 1`
+- `make -n build | grep -F -- 'docker build --no-cache --rm=true --platform=linux/amd64 -t docker.io/bborbe/openldap:1.3.0 .'`
+
+Gates:
+- `make precommit` — must exit 0.
+- `make test` — must exit 0.
+</verification>
+[12:26:24] [system: task_updated]
+[12:26:24] [system: task_notification]
+[12:26:24]   ← agent reply: # Prompt Audit Report: Copy Build Job and Bootstrap
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:25] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] 💭 CLAUDE.md doesn't exist apparently (no output). Let me check the .dark-factory.yaml and look for any docs that mention pre-approve gate / Release Checklist. Let me search.
+
+The command instructions: "Check the project's declared pre-approve gate - Read the project CLAUDE.md for a 'Release Checklist' section or any 'before dark-factory prompt approve' instruction, plus any doc it links".
+
+CLAUDE.md absent. Let me check .dark-factory.yaml and search for "Release Checklist", "prompt approve", "pre-…
+[12:26:26] $ echo "=== .dark-factory.yaml ==="; cat .dark-factory.yaml; echo; echo "=== files at root ==="; ls -la | head -50; echo "=== grep gates ==="; grep -rniE "release checklist|prompt approve|pre-approve|p…
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:26] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] 💭 No CLAUDE.md, no Release Checklist. autoRelease: false. So gate status is "none declared". Let me double check docs directory and maybe a README mentions. The grep found nothing. Let me quickly list docs.
+[12:26:27] $ ls -la docs; echo "=== grep broader ==="; grep -rniE "checklist|before .*approve|gate" docs README.md 2>/dev/null | head -20
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] [system: thinking_tokens]
+[12:26:27] 💭 No gate declared. Now produce the final report: audit findings + gate status. Keep it reasonably concise but relay the agent findings.
+[12:26:30] ## Audit: `prompts/2-copy-build-job-and-bootstrap.md`
+
+**Verdict: PASS — 9/10 (Excellent).** No critical or blocking issues.
+
+### Findings
+
+| Severity | Finding |
+|---|---|
+| **Minor** | Extra `branch: dark-factory/cluster-build-arm` frontmatter field at line 5. DoD permits only `spec`, `status`, `created`, `issue`; dark-factory assigns the branch on approve. Also present in sibling prompts 3 and 4. |
+| **Info** | Optional defense-in-depth: add a YAML parse check (e.g. `python3 -c 'import yaml; ...'`) to exercise the manifest through a real parser. The sha256 pin already fixes the bytes, so this is not required — only adopt if PyYAML is guaranteed in the `claude-yolo` image. |
+| **Info** | Requirement 1's `mkdir -p hack` is redundant (`hack/` already exists), but harmless/idempotent. |
+
+### What verified clean
+- **Structure:** all required sections present (`summary`, `objective`, `context`, `requirements`, `constraints`, `verification`), status `draft`, in inbox, correct filename.
+- **Code references:** every referenced file/symbol confirmed — `Makefile`, `hack/build-cluster.sh:11` (`TEMPLATE="${TEMPLATE:-${SCRIPT_DIR}/build-job.yaml}"`), `hack/build-cluster.sh:31` (sources `cluster-alias.sh`), `hack/cluster-alias.sh`, `docs/dod.md`, `.dark-factory.yaml`. "No Go code" claim confirmed.
+- **Byte-exact contract:** auditor independently extracted the three fenced blocks and confirmed lengths (7215 / 3664 / 136 B) and all three sha256 pins match exactly.
+- **Verification is container-safe:** only `test`, `wc`, `sha256sum`, `grep`, `bash -n`, `make precommit`, `make test` — no `git` (important under `workflow: worktree`), no `docker`/`kubectl`.
+- **Failure modes & security:** manifest/bootstrap half covered here; the rest distributed coherently across prompts 1 and 3. Security markers asserted (`automountServiceAccountToken: false`, `safe.directory`, `oci-worker-no-process-sandbox`, `key: .dockerconfigjson` → `path: config.json`).
+- **YAGNI:** no scope creep; the `TEMPLATE`/`NAMESPACE`/etc. knobs are inherited from the pinned upstream body.
+
+### Pre-approve gate status: **none declared**
+
+- No `CLAUDE.md` in the repo.
+- No "Release Checklist" or "before `dark-factory prompt approve`" instruction found anywhere in `docs/`, `README.md`, or config.
+- `docs/` contains only `dod.md` (the validation prompt).
+- `.dark-factory.yaml` has `autoRelease: false`, so approval does not auto-ship — but no gate was declared to walk.
+
+**Bottom line:** the prompt is approval-ready after removing the `branch:` frontmatter field (recommended for consistency with prompts 3 and 4). There is no declared gate blocking approval; `autoRelease: false` means approval won't ship unattended.
+[12:26:30] result: ## Audit: `prompts/2-copy-build-job-and-bootstrap.md`
+
+**Verdict: PASS — 9/10 (Excellent).** No critical or blocking issues.
+
+### Findings
+
+| Severity | Finding |
+|---|---|
+| **Minor** | Extra `branch: dark-factory/cluster-build-arm` frontmatter field at line 5. DoD permits only `spec`, `status`, `created`, `issue`; dark-factory assigns the branch on approve. Also present in sibling prompts 3 and 4. |
+| **Info** | Optional defense-in-depth: add a YAML parse check (e.g. `python3 -c 'import yaml; ...'`) to exercise the manifest through a real parser. The sha256 pin already fixes the bytes, so this is not required — only adopt if PyYAML is guaranteed in the `claude-yolo` image. |
+| **Info** | Requirement 1's `mkdir -p hack` is redundant (`hack/` already exists), but harmless/idempotent. |
+
+### What verified clean
+- **Structure:** all required sections present (`summary`, `objective`, `context`, `requirements`, `constraints`, `verification`), status `draft`, in inbox, correct filename.
+- **Code references:** every referenced file/symbol confirmed — `Makefile`, `hack/build-cluster.sh:11` (`TEMPLATE="${TEMPLATE:-${SCRIPT_DIR}/build-job.yaml}"`), `hack/build-cluster.sh:31` (sources `cluster-alias.sh`), `hack/cluster-alias.sh`, `docs/dod.md`, `.dark-factory.yaml`. "No Go code" claim confirmed.
+- **Byte-exact contract:** auditor independently extracted the three fenced blocks and confirmed lengths (7215 / 3664 / 136 B) and all three sha256 pins match exactly.
+- **Verification is container-safe:** only `test`, `wc`, `sha256sum`, `grep`, `bash -n`, `make precommit`, `make test` — no `git` (important under `workflow: worktree`), no `docker`/`kubectl`.
+- **Failure modes & security:** manifest/bootstrap half covered here; the rest distributed coherently across prompts 1 and 3. Security markers asserted (`automountServiceAccountToken: false`, `safe.directory`, `oci-worker-no-process-sandbox`, `key: .dockerconfigjson` → `path: config.json`).
+- **YAGNI:** no scope creep; the `TEMPLATE`/`NAMESPACE`/etc. knobs are inherited from the pinned upstream body.
+
+### Pre-approve gate status: **none declared**
+
+- No `CLAUDE.md` in the repo.
+- No "Release Checklist" or "before `dark-factory prompt approve`" instruction found anywhere in `docs/`, `README.md`, or config.
+- `docs/` contains only `dod.md` (the validation prompt).
+- `.dark-factory.yaml` has `autoRelease: false`, so approval does not auto-ship — but no gate was declared to walk.
+
+**Bottom line:** the prompt is approval-ready after removing the `branch:` frontmatter field (recommended for consistency with prompts 3 and 4). There is no declared gate blocking approval; `autoRelease: false` means approval won't ship unattended. | duration: 131829ms | cost: $0.9123 | tokens: 378 in / 1762 out
