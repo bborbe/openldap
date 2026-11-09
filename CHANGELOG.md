@@ -8,6 +8,10 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## Unreleased
+
+- chore: restate the do-not-merge contract exemption sentence in the required check
+
 ## 1.4.0
 
 - feat: add `BUILD_TARGET` selector to `make build` — `local` (default) keeps plain `docker build`; a cluster target renders `hack/build-job.yaml`, applies it, and waits for the Job
