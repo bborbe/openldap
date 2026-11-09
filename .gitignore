@@ -1,0 +1,9 @@
+# dark-factory run logs. Every bborbe repo ignores these; they are per-run
+# transcripts, not source, and committing them buries the actual change under
+# thousands of lines of JSONL.
+/prompts/log
+/specs/log
+
+# dark-factory runtime state.
+/.dark-factory.lock
+/.dark-factory.log
