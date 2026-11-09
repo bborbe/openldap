@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 1.3.1
 
 - chore(dark-factory): worktree workflow with PR delivery
 
